@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
-
-@Injectable({
-  providedIn: 'root',
-})
-export class Movie {}
+export class Movie {
+  movieId: number = 0;
+  name: string = '';
+  rating: number = 0;
+  genre: string = '';
+}

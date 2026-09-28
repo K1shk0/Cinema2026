@@ -1,6 +1,17 @@
-<label for="fname">First name:</label>
-<input type="text" id="fname" name="fname"><br><br>
-<label for="lname">Last name:</label>
-<input type="text" id="lname" name="lname"><br><br>
-<input type="submit" value="Create User">
-<button (click)="Create()">Test</button>
+<h1>Current movies</h1>
+
+<p *ngIf="movies.length === 0">
+  No movies were found.
+</p>
+
+<div *ngFor="let movie of movies">
+  <h2>{{ movie.name }}</h2>
+
+  <p>Genre: {{ movie.genre }}</p>
+  <p>Rating: {{ movie.rating }}</p>
+  <p>Duration: {{ movie.duration }} minutes</p>
+  <p>Required age: {{ movie.requiredAge }}</p>
+  <p>{{ movie.description }}</p>
+
+  <hr>
+</div>

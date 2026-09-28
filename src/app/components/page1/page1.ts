@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, afterNextRender } from '@angular/core';
 import { Movie } from '../../movie';
-import { Generic } from '../../generic';
+import { Generic } from '../../services/generic';
 
 @Component({
   selector: 'app-page1',

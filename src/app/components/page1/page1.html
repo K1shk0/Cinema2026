@@ -1,17 +1,32 @@
-<h1>Current movies</h1>
+<section class="movie-section">
+  <h1>Current Movies</h1>
 
-<p *ngIf="movies.length === 0">
-  No movies were found.
-</p>
+  <p *ngIf="movies.length === 0">
+    No movies were found.
+  </p>
 
-<div *ngFor="let movie of movies">
-  <h2>{{ movie.name }}</h2>
+  <div class="movie-list">
+    <div class="movie-card" *ngFor="let movie of movies">
 
-  <p>Genre: {{ movie.genre }}</p>
-  <p>Rating: {{ movie.rating }}</p>
-  <p>Duration: {{ movie.duration }} minutes</p>
-  <p>Required age: {{ movie.requiredAge }}</p>
-  <p>{{ movie.description }}</p>
+      <img
+        class="movie-cover"
+        [src]="movie.cover"
+        [alt]="movie.name"
+      >
 
-  <hr>
-</div>
+      <div class="movie-information">
+        <h2>{{ movie.name }}</h2>
+
+        <p>{{ movie.description }}</p>
+
+        <p><strong>Genre:</strong> {{ movie.genre }}</p>
+        <p><strong>Rating:</strong> {{ movie.rating }}</p>
+        <p><strong>Duration:</strong> {{ movie.duration }} minutes</p>
+        <p><strong>Required age:</strong> {{ movie.requiredAge }}</p>
+
+        <button type="button">Book ticket</button>
+      </div>
+
+    </div>
+  </div>
+</section>

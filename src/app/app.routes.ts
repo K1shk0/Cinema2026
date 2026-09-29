@@ -6,6 +6,6 @@ import { Page3 } from './components/page3/page3';
 export const routes: Routes = [
     {path: '', redirectTo: 'page1', pathMatch: 'full'},
     {path: 'page1', component : Page1},
-    {path: 'page2', component : Page2},
+    {path: 'page2/:movieId', component: Page2},
     {path: 'page3', component : Page3}
 ];

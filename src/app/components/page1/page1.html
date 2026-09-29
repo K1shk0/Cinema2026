@@ -24,7 +24,9 @@
         <p><strong>Duration:</strong> {{ movie.duration }} minutes</p>
         <p><strong>Required age:</strong> {{ movie.requiredAge }}</p>
 
-        <button type="button">Book ticket</button>
+        <button type="button" (click)="bookMovie(movie.movieId)">
+        Book ticket
+        </button>
       </div>
 
     </div>

@@ -1,5 +1,36 @@
-<label for="Titel">Movie Name: </label>
-<input type="text" id="Titel" name="Titel"><br><br>
-<label for="Genre">Genre: </label>
-<input type="text" id="Genre" name="Genre"><br><br>
-<input type="submit" value="Create Movie">
+<section *ngIf="movie">
+  <h1>Book tickets for {{ movie.name }}</h1>
+
+  <p>{{ movie.description }}</p>
+  <p><strong>Genre:</strong> {{ movie.genre }}</p>
+  <p><strong>Duration:</strong> {{ movie.duration }} minutes</p>
+  <p><strong>Required age:</strong> {{ movie.requiredAge }}</p>
+
+  <h2>Available showtimes</h2>
+
+  <div *ngFor="let currentShow of currentShows">
+    <p>
+      <strong>Date and time:</strong>
+      {{ currentShow.showDate | date:'dd/MM/yyyy HH:mm' }}
+    </p>
+
+    <p>
+      <strong>Hall ID:</strong>
+      {{ currentShow.hallId }}
+    </p>
+
+    <button type="button">
+      Select showing
+    </button>
+
+    <hr>
+  </div>
+
+  <p *ngIf="showsLoaded && currentShows.length === 0">
+    No showtimes are currently available for this movie.
+  </p>
+</section>
+
+<p *ngIf="!movie">
+  Loading movie...
+</p>

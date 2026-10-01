@@ -6,7 +6,7 @@ import { Page3 } from './components/page3/page3';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, Page1, Page2, Page3, RouterLink, RouterLinkActive],
+  imports: [RouterOutlet, RouterLink, RouterLinkActive],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })

@@ -38,22 +38,43 @@
 </div>
 
 <div class="seat-layout">
-  <button
-    *ngFor="let seat of seats"
-    type="button"
-    class="seat"
-    [class.booked]="isSeatBooked(seat.seatId)"
-    [class.selected]="selectedSeat?.seatId === seat.seatId"
-    [disabled]="isSeatBooked(seat.seatId)"
-    (click)="selectSeat(seat)"
+  <div
+    class="seat-row"
+    *ngFor="let row of getRows()"
   >
-    Row {{ seat.row }}<br>
-    Seat {{ seat.column }}
-
-    <span *ngIf="isSeatBooked(seat.seatId)">
-      <br>(Booked)
+    <span class="row-label">
+      Row {{ row }}
     </span>
-  </button>
+
+    <button
+      *ngFor="let seat of getSeatsForRow(row)"
+      type="button"
+      class="seat"
+      [class.booked]="isSeatBooked(seat.seatId)"
+      [class.selected]="selectedSeat?.seatId === seat.seatId"
+      [disabled]="isSeatBooked(seat.seatId)"
+      (click)="selectSeat(seat)"
+    >
+      {{ seat.column }}
+    </button>
+  </div>
+</div>
+
+<div class="seat-information">
+  <span>
+    <span class="example-seat available"></span>
+    Available
+  </span>
+
+  <span>
+    <span class="example-seat booked-example"></span>
+    Booked
+  </span>
+
+  <span>
+    <span class="example-seat selected-example"></span>
+    Selected
+  </span>
 </div>
 
 <p *ngIf="selectedSeat">

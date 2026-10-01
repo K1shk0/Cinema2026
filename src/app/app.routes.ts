@@ -5,9 +5,10 @@ import { Page3 } from './components/page3/page3';
 import { Admin } from './components/admin/admin';
 
 export const routes: Routes = [
-    {path: '', redirectTo: 'page1', pathMatch: 'full'},
-    {path: 'page1', component : Page1},
-    {path: 'page2/:movieId', component: Page2},
-    {path: 'page3', component : Page3},
-    {path: 'admin', component: Admin}
+  {path: '', redirectTo: 'page1', pathMatch: 'full'},
+  {path: 'page1', component: Page1},
+  {path: 'page2/:movieId', component: Page2},
+  {path: 'page3', component: Page3},
+  {path: 'admin', component: Admin},
+  {path: '**',redirectTo: 'page1'}
 ];

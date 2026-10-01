@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Movie } from '../../movie';
 import { CurrentShow } from '../../current-show';
 import { Seat } from '../../seat';
@@ -30,7 +30,7 @@ export class Page2 implements OnInit {
   confirmBooking(): void {
   const currentShow = this.selectedCurrentShow;
   const seat = this.selectedSeat;
-  
+
   if (this.newPerson.name === '' || this.newPerson.email === '' || this.newPerson.age <= 0) {
   alert('Please fill in all customer information.');
   return;
@@ -47,22 +47,20 @@ if (this.movie && this.newPerson.age < this.movie.requiredAge) {
 
   this.personRepository.create('Person', this.newPerson).subscribe({
     next: (createdPerson) => {
-      console.log('Created person:', createdPerson);
       const booking = new Booking();
 
       booking.personId = createdPerson.id;
       booking.currentShowId = currentShow.currentShowId;
       booking.seatId = seat.seatId;
       booking.bookingDate  = new Date().toISOString();
-      console.log('Booking being sent:', booking);
       this.bookingRepository.create('Booking', booking).subscribe({
         next: () => {
-          alert('Booking created successfully!');
+  this.bookedSeatIds.push(seat.seatId);
+  this.selectedSeat = undefined;
+  this.newPerson = new Person();
 
-          this.bookedSeatIds.push(seat.seatId);
-          this.selectedSeat = undefined;
-          this.newPerson = new Person();
-        },
+  this.router.navigate(['/page3']);
+}, 
         error: (error) => {
   console.error('Could not create booking:', error.error);
   alert(error.error);
@@ -76,7 +74,7 @@ if (this.movie && this.newPerson.age < this.movie.requiredAge) {
 }
 
   constructor(
-  private route: ActivatedRoute, private movieRepository: Generic<Movie>,
+  private route: ActivatedRoute, private router: Router, private movieRepository: Generic<Movie>,
   private currentShowRepository: Generic<CurrentShow>, private seatRepository: Generic<Seat>,
   private bookingRepository: Generic<Booking>, private personRepository: Generic<Person>) {}
 
@@ -130,9 +128,18 @@ if (this.movie && this.newPerson.age < this.movie.requiredAge) {
 loadSeats(hallId: number): void {
   this.seatRepository.getAll('Seat').subscribe({
     next: (seats) => {
-      this.seats = seats.filter(
-        seat => seat.hallId === hallId && seat.isAvailable
-      );
+      this.seats = seats
+        .filter(seat =>
+          seat.hallId === hallId &&
+          seat.isAvailable
+        )
+        .sort((seatA, seatB) => {
+          if (seatA.row !== seatB.row) {
+            return seatA.row - seatB.row;
+          }
+
+          return seatA.column - seatB.column;
+        });
 
       this.seatsLoaded = true;
     },
@@ -146,6 +153,18 @@ loadSeats(hallId: number): void {
 isSeatBooked(seatId: number): boolean {
   return this.bookedSeatIds.includes(seatId);
 }
+
+getRows(): number[] {
+  return [...new Set(this.seats.map(seat => seat.row))]
+    .sort((rowA, rowB) => rowA - rowB);
+}
+
+getSeatsForRow(row: number): Seat[] {
+  return this.seats
+    .filter(seat => seat.row === row)
+    .sort((seatA, seatB) => seatA.column - seatB.column);
+}
+
 selectSeat(seat: Seat): void {
   if (!this.isSeatBooked(seat.seatId)) {
     this.selectedSeat = seat;

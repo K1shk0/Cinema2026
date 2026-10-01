@@ -1,0 +1,21 @@
+.confirmation {
+  width: 400px;
+  margin: 50px auto;
+  padding: 25px;
+  text-align: center;
+  background-color: #f2f2f2;
+  border: 1px solid gray;
+}
+
+.confirmation a {
+  display: inline-block;
+  margin-top: 15px;
+  padding: 8px 15px;
+  background-color: dodgerblue;
+  color: white;
+  text-decoration: none;
+}
+
+.confirmation a:hover {
+  background-color: #1467b8;
+}

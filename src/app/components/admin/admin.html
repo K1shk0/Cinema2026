@@ -30,6 +30,14 @@
   >
   <br><br>
 
+  <label>Description:</label><br>
+  <textarea
+    name="description"
+    [(ngModel)]="newMovie.description"
+    required
+  ></textarea>
+  <br><br>
+
   <label>Required age:</label><br>
   <input
     type="number"
@@ -39,11 +47,21 @@
   >
   <br><br>
 
+  <label>Duration in minutes:</label><br>
+  <input
+    type="number"
+    name="duration"
+    [(ngModel)]="newMovie.duration"
+    required
+  >
+  <br><br>
+
   <label>Cover URL:</label><br>
   <input
     type="text"
     name="cover"
     [(ngModel)]="newMovie.cover"
+    required
   >
   <br><br>
 
@@ -83,6 +101,13 @@
   >
   <br><br>
 
+  <label>Description:</label><br>
+  <textarea
+    [(ngModel)]="movie.description"
+    name="movieDescription{{ movie.movieId }}"
+  ></textarea>
+  <br><br>
+
   <label>Required age:</label><br>
   <input
     type="number"
@@ -92,21 +117,12 @@
   <br><br>
 
   <label>Duration in minutes:</label><br>
-<input
-  type="number"
-  [(ngModel)]="movie.duration"
-  name="movieDuration{{ movie.movieId }}"
->
-<br><br>
-
-  <label>Duration in minutes:</label><br>
-<input
-  type="number"
-  name="duration"
-  [(ngModel)]="newMovie.duration"
-  required
->
-<br><br>
+  <input
+    type="number"
+    [(ngModel)]="movie.duration"
+    name="movieDuration{{ movie.movieId }}"
+  >
+  <br><br>
 
   <label>Cover URL:</label><br>
   <input
@@ -128,6 +144,384 @@
     (click)="deleteMovie(movie.movieId)"
   >
     Delete Movie
+  </button>
+
+  <hr>
+</div>
+
+<h2>Add Hall</h2>
+
+<form (ngSubmit)="addHall()">
+  <label>Hall name:</label><br>
+  <input
+    type="text"
+    name="hallName"
+    [(ngModel)]="newHall.name"
+    required
+  >
+  <br><br>
+
+  <label>Capacity:</label><br>
+  <input
+    type="number"
+    name="hallCapacity"
+    [(ngModel)]="newHall.capacity"
+    required
+  >
+  <br><br>
+
+  <button type="submit">Add Hall</button>
+</form>
+
+<hr>
+
+<h2>Halls</h2>
+
+<p *ngIf="halls.length === 0">
+  No halls were found.
+</p>
+
+<div *ngFor="let hall of halls">
+  <p><strong>Hall ID:</strong> {{ hall.hallId }}</p>
+
+  <label>Name:</label><br>
+  <input
+    type="text"
+    [(ngModel)]="hall.name"
+    name="hallName{{ hall.hallId }}"
+  >
+  <br><br>
+
+  <label>Capacity:</label><br>
+  <input
+    type="number"
+    [(ngModel)]="hall.capacity"
+    name="hallCapacity{{ hall.hallId }}"
+  >
+  <br><br>
+
+  <button
+    type="button"
+    (click)="updateHall(hall)"
+  >
+    Save Changes
+  </button>
+
+  <button
+    type="button"
+    (click)="deleteHall(hall.hallId)"
+  >
+    Delete Hall
+  </button>
+
+  <hr>
+</div>
+
+<h2>Add Seat</h2>
+
+<form (ngSubmit)="addSeat()">
+  <label>Hall:</label><br>
+  <select
+    name="seatHall"
+    [(ngModel)]="newSeat.hallId"
+    required
+  >
+    <option [ngValue]="0">Choose a hall</option>
+
+    <option
+      *ngFor="let hall of halls"
+      [ngValue]="hall.hallId"
+    >
+      {{ hall.name }} - ID: {{ hall.hallId }}
+    </option>
+  </select>
+  <br><br>
+
+  <label>Row:</label><br>
+  <input
+    type="number"
+    name="seatRow"
+    [(ngModel)]="newSeat.row"
+    required
+  >
+  <br><br>
+
+  <label>Seat number:</label><br>
+  <input
+    type="number"
+    name="seatColumn"
+    [(ngModel)]="newSeat.column"
+    required
+  >
+  <br><br>
+
+  <label>
+    <input
+      type="checkbox"
+      name="seatAvailable"
+      [(ngModel)]="newSeat.isAvailable"
+    >
+    Available
+  </label>
+  <br><br>
+
+  <button type="submit">Add Seat</button>
+</form>
+
+<hr>
+
+<h2>Seats</h2>
+
+<p *ngIf="seats.length === 0">
+  No seats were found.
+</p>
+
+<div *ngFor="let seat of seats">
+  <p><strong>Seat ID:</strong> {{ seat.seatId }}</p>
+
+  <label>Hall:</label><br>
+  <select
+    [(ngModel)]="seat.hallId"
+    name="seatHall{{ seat.seatId }}"
+  >
+    <option
+      *ngFor="let hall of halls"
+      [ngValue]="hall.hallId"
+    >
+      {{ hall.name }} - ID: {{ hall.hallId }}
+    </option>
+  </select>
+  <br><br>
+
+  <label>Row:</label><br>
+  <input
+    type="number"
+    [(ngModel)]="seat.row"
+    name="seatRow{{ seat.seatId }}"
+  >
+  <br><br>
+
+  <label>Seat number:</label><br>
+  <input
+    type="number"
+    [(ngModel)]="seat.column"
+    name="seatColumn{{ seat.seatId }}"
+  >
+  <br><br>
+
+  <label>
+    <input
+      type="checkbox"
+      [(ngModel)]="seat.isAvailable"
+      name="seatAvailable{{ seat.seatId }}"
+    >
+    Available
+  </label>
+  <br><br>
+
+  <button
+    type="button"
+    (click)="updateSeat(seat)"
+  >
+    Save Changes
+  </button>
+
+  <button
+    type="button"
+    (click)="deleteSeat(seat.seatId)"
+  >
+    Delete Seat
+  </button>
+
+  <hr>
+</div>
+
+<h2>Add Showtime</h2>
+
+<form (ngSubmit)="addCurrentShow()">
+  <label>Movie:</label><br>
+  <select
+    name="showMovie"
+    [(ngModel)]="newCurrentShow.movieId"
+    required
+  >
+    <option [ngValue]="0">Choose a movie</option>
+
+    <option
+      *ngFor="let movie of movies"
+      [ngValue]="movie.movieId"
+    >
+      {{ movie.name }} - ID: {{ movie.movieId }}
+    </option>
+  </select>
+  <br><br>
+
+  <label>Hall:</label><br>
+  <select
+    name="showHall"
+    [(ngModel)]="newCurrentShow.hallId"
+    required
+  >
+    <option [ngValue]="0">Choose a hall</option>
+
+    <option
+      *ngFor="let hall of halls"
+      [ngValue]="hall.hallId"
+    >
+      {{ hall.name }} - ID: {{ hall.hallId }}
+    </option>
+  </select>
+  <br><br>
+
+  <label>Show date and time:</label><br>
+  <input
+    type="datetime-local"
+    name="showDate"
+    [(ngModel)]="newCurrentShow.showDate"
+    required
+  >
+  <br><br>
+
+  <button type="submit">Add Showtime</button>
+</form>
+
+<hr>
+
+<h2>Showtimes</h2>
+
+<p *ngIf="currentShows.length === 0">
+  No showtimes were found.
+</p>
+
+<div *ngFor="let currentShow of currentShows">
+  <p>
+    <strong>Showtime ID:</strong>
+    {{ currentShow.currentShowId }}
+  </p>
+
+  <label>Movie:</label><br>
+  <select
+    [(ngModel)]="currentShow.movieId"
+    name="showMovie{{ currentShow.currentShowId }}"
+  >
+    <option
+      *ngFor="let movie of movies"
+      [ngValue]="movie.movieId"
+    >
+      {{ movie.name }} - ID: {{ movie.movieId }}
+    </option>
+  </select>
+  <br><br>
+
+  <label>Hall:</label><br>
+  <select
+    [(ngModel)]="currentShow.hallId"
+    name="showHall{{ currentShow.currentShowId }}"
+  >
+    <option
+      *ngFor="let hall of halls"
+      [ngValue]="hall.hallId"
+    >
+      {{ hall.name }} - ID: {{ hall.hallId }}
+    </option>
+  </select>
+  <br><br>
+
+  <label>Show date and time:</label><br>
+  <input type="datetime-local" [(ngModel)]="currentShow.showDate" name="showDate{{ currentShow.currentShowId }}">
+  <br><br>
+
+  <button type="button"(click)="updateCurrentShow(currentShow)">Save Changes</button>
+
+  <button type="button"(click)="deleteCurrentShow(currentShow.currentShowId)">Delete Showtime</button>
+  <hr>
+</div>
+
+<h2>Bookings</h2>
+
+<p *ngIf="bookings.length === 0">
+  No bookings were found.
+</p>
+
+<div *ngFor="let booking of bookings">
+  <p>
+    <strong>Booking ID:</strong>
+    {{ booking.bookingId }}
+  </p>
+
+  <p>
+    <strong>Person ID:</strong>
+    {{ booking.personId }}
+  </p>
+
+  <p>
+    <strong>Showtime ID:</strong>
+    {{ booking.currentShowId }}
+  </p>
+
+  <p>
+    <strong>Seat ID:</strong>
+    {{ booking.seatId }}
+  </p>
+
+  <p>
+    <strong>Booking date:</strong>
+    {{ booking.bookingDate | date:'dd/MM/yyyy HH:mm' }}
+  </p>
+
+  <button type="button"(click)="deleteBooking(booking.bookingId)">Cancel Booking</button>
+<hr>
+</div>
+
+
+<h2>Customers</h2>
+
+<p *ngIf="persons.length === 0">
+  No customers were found.
+</p>
+
+<div *ngFor="let person of persons">
+  <p>
+    <strong>Customer ID:</strong>
+    {{ person.id }}
+  </p>
+
+  <label>Name:</label><br>
+  <input
+    type="text"
+    [(ngModel)]="person.name"
+    name="personName{{ person.id }}"
+  >
+  <br><br>
+
+  <label>Age:</label><br>
+  <input
+    type="number"
+    [(ngModel)]="person.age"
+    name="personAge{{ person.id }}"
+  >
+  <br><br>
+
+  <label>Email:</label><br>
+  <input
+    type="email"
+    [(ngModel)]="person.email"
+    name="personEmail{{ person.id }}"
+  >
+  <br><br>
+
+  <button
+    type="button"
+    (click)="updatePerson(person)"
+  >
+    Save Changes
+  </button>
+
+  <button
+    type="button"
+    (click)="deletePerson(person.id)"
+  >
+    Delete Customer
   </button>
 
   <hr>

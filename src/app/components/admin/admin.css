@@ -1,0 +1,63 @@
+:host {
+  display: block;
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+h1 {
+  text-align: center;
+}
+
+h2 {
+  margin-top: 35px;
+  padding-bottom: 5px;
+  border-bottom: 2px solid #333;
+}
+
+form {
+  padding: 15px;
+  background-color: #f2f2f2;
+  border: 1px solid #aaa;
+}
+
+:host > div {
+  margin: 15px 0;
+  padding: 15px;
+  background-color: #f8f8f8;
+  border: 1px solid #bbb;
+}
+
+input,
+select,
+textarea {
+  width: 300px;
+  padding: 7px;
+  box-sizing: border-box;
+}
+
+textarea {
+  height: 80px;
+  resize: vertical;
+}
+
+button {
+  margin-right: 8px;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+button[type="submit"] {
+  background-color: dodgerblue;
+  color: white;
+  border: 1px solid #1467b8;
+}
+
+button[type="submit"]:hover {
+  background-color: #1467b8;
+}
+
+hr {
+  margin: 25px 0;
+}

@@ -33,22 +33,27 @@
       {{ selectedCurrentShow.showDate | date:'dd/MM/yyyy HH:mm' }}
     </p>
 
-    <div *ngFor="let seat of seats">
+    <div class="screen">
+  SCREEN
+</div>
+
+<div class="seat-layout">
   <button
-  type="button"
-  [disabled]="isSeatBooked(seat.seatId)"
-  (click)="selectSeat(seat)"
->
-  Row {{ seat.row }} - Seat {{ seat.column }}
+    *ngFor="let seat of seats"
+    type="button"
+    class="seat"
+    [class.booked]="isSeatBooked(seat.seatId)"
+    [class.selected]="selectedSeat?.seatId === seat.seatId"
+    [disabled]="isSeatBooked(seat.seatId)"
+    (click)="selectSeat(seat)"
+  >
+    Row {{ seat.row }}<br>
+    Seat {{ seat.column }}
 
-  <span *ngIf="isSeatBooked(seat.seatId)">
-    (Booked)
-  </span>
-
-  <span *ngIf="selectedSeat?.seatId === seat.seatId">
-    (Selected)
-  </span>
-</button>
+    <span *ngIf="isSeatBooked(seat.seatId)">
+      <br>(Booked)
+    </span>
+  </button>
 </div>
 
 <p *ngIf="selectedSeat">

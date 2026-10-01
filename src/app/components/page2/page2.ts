@@ -30,6 +30,16 @@ export class Page2 implements OnInit {
   confirmBooking(): void {
   const currentShow = this.selectedCurrentShow;
   const seat = this.selectedSeat;
+  
+  if (this.newPerson.name === '' || this.newPerson.email === '' || this.newPerson.age <= 0) {
+  alert('Please fill in all customer information.');
+  return;
+}
+
+if (this.movie && this.newPerson.age < this.movie.requiredAge) {
+  alert('You do not meet the required age for this movie.');
+  return;
+}
 
   if (!currentShow || !seat) {
     return;
@@ -40,7 +50,7 @@ export class Page2 implements OnInit {
       console.log('Created person:', createdPerson);
       const booking = new Booking();
 
-      booking.personId = createdPerson.Id;
+      booking.personId = createdPerson.id;
       booking.currentShowId = currentShow.currentShowId;
       booking.seatId = seat.seatId;
       booking.bookingDate  = new Date().toISOString();
@@ -116,6 +126,7 @@ export class Page2 implements OnInit {
     }
   });
 }
+
 loadSeats(hallId: number): void {
   this.seatRepository.getAll('Seat').subscribe({
     next: (seats) => {

@@ -20,14 +20,91 @@
     </p>
 
     <button type="button"(click)="selectCurrentShow(currentShow)">Select showing</button>
-
   <hr>
   </div>
 
-  <p *ngIf="showsLoaded && currentShows.length === 0">
-    No showtimes are currently available for this movie.
-  </p>
+  <p *ngIf="showsLoaded && currentShows.length === 0">No showtimes are currently available for this movie.</p>
+
+  <section *ngIf="selectedCurrentShow">
+    <h2>Select a seat</h2>
+
+    <p>
+      <strong>Selected showing:</strong>
+      {{ selectedCurrentShow.showDate | date:'dd/MM/yyyy HH:mm' }}
+    </p>
+
+    <div *ngFor="let seat of seats">
+  <button
+  type="button"
+  [disabled]="isSeatBooked(seat.seatId)"
+  (click)="selectSeat(seat)"
+>
+  Row {{ seat.row }} - Seat {{ seat.column }}
+
+  <span *ngIf="isSeatBooked(seat.seatId)">
+    (Booked)
+  </span>
+
+  <span *ngIf="selectedSeat?.seatId === seat.seatId">
+    (Selected)
+  </span>
+</button>
+</div>
+
+<p *ngIf="selectedSeat">
+  You selected Row {{ selectedSeat.row }},
+  Seat {{ selectedSeat.column }}.
+</p>
+
+    <p *ngIf="seatsLoaded && seats.length === 0">
+      No available seats were found for this hall.
+    </p>
+  </section>
 </section>
+    <p *ngIf="seatsLoaded && seats.length === 0">
+      No available seats were found for this hall.
+    </p>
+
+<form *ngIf="selectedSeat">
+  <h2>Customer information</h2>
+
+  <label for="name">Name:</label><br>
+  <input
+    id="name"
+    name="name"
+    type="text"
+    [(ngModel)]="newPerson.name"
+    required
+  >
+
+  <br><br>
+
+  <label for="age">Age:</label><br>
+  <input
+    id="age"
+    name="age"
+    type="number"
+    [(ngModel)]="newPerson.age"
+    required
+  >
+
+  <br><br>
+
+  <label for="email">Email:</label><br>
+  <input
+    id="email"
+    name="email"
+    type="email"
+    [(ngModel)]="newPerson.email"
+    required
+  >
+
+  <br><br>
+
+  <button type="button" (click)="confirmBooking()">
+  Confirm booking
+</button>
+</form>
 
 <p *ngIf="!movie">
   Loading movie...

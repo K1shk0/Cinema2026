@@ -5,11 +5,14 @@ import { Movie } from '../../movie';
 import { CurrentShow } from '../../current-show';
 import { Seat } from '../../seat';
 import { Generic } from '../../services/generic';
+import { Booking } from '../../booking';
+import { FormsModule } from '@angular/forms';
+import { Person } from '../../person';
 
 @Component({
   selector: 'app-page2',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './page2.html',
   styleUrl: './page2.css'
 })
@@ -21,9 +24,49 @@ export class Page2 implements OnInit {
   selectedCurrentShow?: CurrentShow;
   seats: Seat[] = [];
   seatsLoaded: boolean = false;
+  bookedSeatIds: number[] = [];
+  selectedSeat?: Seat;
+  newPerson: Person = new Person();
+  confirmBooking(): void {
+  const currentShow = this.selectedCurrentShow;
+  const seat = this.selectedSeat;
 
-  constructor(private route: ActivatedRoute, private movieRepository: Generic<Movie>,
-    private currentShowRepository: Generic<CurrentShow>,private seatRepository: Generic<Seat>) {}
+  if (!currentShow || !seat) {
+    return;
+  }
+
+  this.personRepository.create('Person', this.newPerson).subscribe({
+    next: (createdPerson) => {
+      const booking = new Booking();
+
+      booking.personId = createdPerson.personId;
+      booking.currentShowId = currentShow.currentShowId;
+      booking.seatId = seat.seatId;
+      booking.bookingDate  = new Date().toISOString();
+
+      this.bookingRepository.create('Booking', booking).subscribe({
+        next: () => {
+          alert('Booking created successfully!');
+
+          this.bookedSeatIds.push(seat.seatId);
+          this.selectedSeat = undefined;
+          this.newPerson = new Person();
+        },
+        error: (error) => {
+          console.error('Could not create booking:', error);
+        }
+      });
+    },
+    error: (error) => {
+      console.error('Could not create person:', error);
+    }
+  });
+}
+
+  constructor(
+  private route: ActivatedRoute, private movieRepository: Generic<Movie>,
+  private currentShowRepository: Generic<CurrentShow>, private seatRepository: Generic<Seat>,
+  private bookingRepository: Generic<Booking>, private personRepository: Generic<Person>) {}
 
   ngOnInit(): void {
     const movieId = Number(this.route.snapshot.paramMap.get('movieId'));
@@ -49,18 +92,50 @@ export class Page2 implements OnInit {
     });
   }
 
-  selectCurrentShow(currentShow: CurrentShow): void
-  {
-    this.selectedCurrentShow = currentShow;
-    this.seats = [];
-    this.seatsLoaded = false;
+  selectCurrentShow(currentShow: CurrentShow): void {
+  this.selectedCurrentShow = currentShow;
+  this.selectedSeat = undefined;
+  this.seats = [];
+  this.bookedSeatIds = [];
+  this.seatsLoaded = false;
 
-    this.seatRepository.getAll('Seat').subscribe({
-      next: (seats) => {this.seats = seats.filter(seat => seat.hallId === currentShow.hallId && seat.isAvailable);
-        this.seatsLoaded = true;
-      },
-      error: (error) => {console.error('Could not load seats:', error);
-        this.seatsLoaded = true;}
-    });
+  this.bookingRepository.getAll('Booking').subscribe({
+    next: (bookings) => {
+      this.bookedSeatIds = bookings
+        .filter(booking =>
+          booking.currentShowId === currentShow.currentShowId
+        )
+        .map(booking => booking.seatId);
+
+      this.loadSeats(currentShow.hallId);
+    },
+    error: (error) => {
+      console.error('Could not load bookings:', error);
+    }
+  });
+}
+loadSeats(hallId: number): void {
+  this.seatRepository.getAll('Seat').subscribe({
+    next: (seats) => {
+      this.seats = seats.filter(
+        seat => seat.hallId === hallId && seat.isAvailable
+      );
+
+      this.seatsLoaded = true;
+    },
+    error: (error) => {
+      console.error('Could not load seats:', error);
+      this.seatsLoaded = true;
+    }
+  });
+}
+
+isSeatBooked(seatId: number): boolean {
+  return this.bookedSeatIds.includes(seatId);
+}
+selectSeat(seat: Seat): void {
+  if (!this.isSeatBooked(seat.seatId)) {
+    this.selectedSeat = seat;
   }
+}
 }

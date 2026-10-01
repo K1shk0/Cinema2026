@@ -37,13 +37,14 @@ export class Page2 implements OnInit {
 
   this.personRepository.create('Person', this.newPerson).subscribe({
     next: (createdPerson) => {
+      console.log('Created person:', createdPerson);
       const booking = new Booking();
 
-      booking.personId = createdPerson.personId;
+      booking.personId = createdPerson.Id;
       booking.currentShowId = currentShow.currentShowId;
       booking.seatId = seat.seatId;
       booking.bookingDate  = new Date().toISOString();
-
+      console.log('Booking being sent:', booking);
       this.bookingRepository.create('Booking', booking).subscribe({
         next: () => {
           alert('Booking created successfully!');
@@ -53,8 +54,9 @@ export class Page2 implements OnInit {
           this.newPerson = new Person();
         },
         error: (error) => {
-          console.error('Could not create booking:', error);
-        }
+  console.error('Could not create booking:', error.error);
+  alert(error.error);
+}
       });
     },
     error: (error) => {

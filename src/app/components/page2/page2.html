@@ -19,11 +19,9 @@
       {{ currentShow.hallId }}
     </p>
 
-    <button type="button">
-      Select showing
-    </button>
+    <button type="button"(click)="selectCurrentShow(currentShow)">Select showing</button>
 
-    <hr>
+  <hr>
   </div>
 
   <p *ngIf="showsLoaded && currentShows.length === 0">

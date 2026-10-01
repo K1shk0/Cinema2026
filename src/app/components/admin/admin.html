@@ -1,1 +1,134 @@
-<p>admin works!</p>
+<h1>Admin Page</h1>
+
+<h2>Add Movie</h2>
+
+<form (ngSubmit)="addMovie()">
+  <label>Name:</label><br>
+  <input
+    type="text"
+    name="name"
+    [(ngModel)]="newMovie.name"
+    required
+  >
+  <br><br>
+
+  <label>Genre:</label><br>
+  <input
+    type="text"
+    name="genre"
+    [(ngModel)]="newMovie.genre"
+    required
+  >
+  <br><br>
+
+  <label>Rating:</label><br>
+  <input
+    type="number"
+    name="rating"
+    [(ngModel)]="newMovie.rating"
+    required
+  >
+  <br><br>
+
+  <label>Required age:</label><br>
+  <input
+    type="number"
+    name="requiredAge"
+    [(ngModel)]="newMovie.requiredAge"
+    required
+  >
+  <br><br>
+
+  <label>Cover URL:</label><br>
+  <input
+    type="text"
+    name="cover"
+    [(ngModel)]="newMovie.cover"
+  >
+  <br><br>
+
+  <button type="submit">Add Movie</button>
+</form>
+
+<hr>
+
+<h2>Movies</h2>
+
+<p *ngIf="movies.length === 0">
+  No movies were found.
+</p>
+
+<div *ngFor="let movie of movies">
+  <label>Name:</label><br>
+  <input
+    type="text"
+    [(ngModel)]="movie.name"
+    name="movieName{{ movie.movieId }}"
+  >
+  <br><br>
+
+  <label>Genre:</label><br>
+  <input
+    type="text"
+    [(ngModel)]="movie.genre"
+    name="movieGenre{{ movie.movieId }}"
+  >
+  <br><br>
+
+  <label>Rating:</label><br>
+  <input
+    type="number"
+    [(ngModel)]="movie.rating"
+    name="movieRating{{ movie.movieId }}"
+  >
+  <br><br>
+
+  <label>Required age:</label><br>
+  <input
+    type="number"
+    [(ngModel)]="movie.requiredAge"
+    name="movieAge{{ movie.movieId }}"
+  >
+  <br><br>
+
+  <label>Duration in minutes:</label><br>
+<input
+  type="number"
+  [(ngModel)]="movie.duration"
+  name="movieDuration{{ movie.movieId }}"
+>
+<br><br>
+
+  <label>Duration in minutes:</label><br>
+<input
+  type="number"
+  name="duration"
+  [(ngModel)]="newMovie.duration"
+  required
+>
+<br><br>
+
+  <label>Cover URL:</label><br>
+  <input
+    type="text"
+    [(ngModel)]="movie.cover"
+    name="movieCover{{ movie.movieId }}"
+  >
+  <br><br>
+
+  <button
+    type="button"
+    (click)="updateMovie(movie)"
+  >
+    Save Changes
+  </button>
+
+  <button
+    type="button"
+    (click)="deleteMovie(movie.movieId)"
+  >
+    Delete Movie
+  </button>
+
+  <hr>
+</div>
